@@ -58,12 +58,10 @@ int isSafe(int x,int y,int n){
 }
 void solve(vector<vector<int>>i,int x,int y,vector<vector<int>>f,int i_s){
     int min_cost=INT_MAX;
-    set<vector<vector<int>>>s;
     priority_queue<Node*,vector<Node*>,comp>pq;
     Node* root=newNode(i,x,y,x,y,0,NULL);
     root->cost=calculateCost(i,f,i_s);
     min_cost=root->cost;
-    s.insert(root->mat);
     pq.push(root);
     while(!pq.empty()){
         Node* min=pq.top();
@@ -81,60 +79,41 @@ void solve(vector<vector<int>>i,int x,int y,vector<vector<int>>f,int i_s){
         }
         for(int i=0;i<4;i++){
             if(isSafe(min->x+row[i],min->y+col[i],i_s)){
-               /* swap(min->mat[min->x][min->y],min->mat[min->x+row[i]][min->y+col[i]]);
-                 if(s.find(min->mat)==s.end()){
-                swap(min->mat[min->x][min->y],min->mat[min->x+row[i]][min->y+col[i]]);
-               */ 
                Node* child=newNode(min->mat,min->x,min->y,min->x+row[i],min->y+col[i],min->level+1,min);
                 child->cost=calculateCost(child->mat,f,i_s);
                 pq.push(child);
-/*               s.insert(child->mat);
-                }
-                else{
-                    //if the child node to be generated is already present in tree then no need to generate 
-                 swap(min->mat[min->x][min->y],min->mat[min->x+row[i]][min->y+col[i]]);
-                 
-                 
-                }
-*/          }
+          }
         }
     }
 }
 
 int main()
 {
-        clock_t start, end; 
-    start = clock(); 
+    int is;cin>>is;
+    int x,y;
+    vector<vector<int>>vec( is , vector<int> (is));
+    for(int l=0;l<is;l++){
+        for(int m=0;m<is;m++)
+        {
+            cin>>vec[l][m];
+         if(vec[l][m]==0)
+         {
+               x=l;
+               y=m;
 
-    vector<vector<int>>i{
-       {0,1,3},
-       {4,2,5},
-       {7,8,6}
-   };
-   vector<vector<int>>f{
-       {1,2,3},
-       {4,5,6},
-       {7,8,0}
+         }
+        }
+    }
+    vector<vector<int>>f( is , vector<int> (is));
+    
+        for(int l=0;l<is;l++){
+          for(int m=0;m<is;m++)
+          {
+            cin>>f[l][m];
 
-   };
-   int x,y,i_s=i.size();
-   for(int s=0;s<i_s;s++){
-       for(int j=0;j<i_s;j++){
-           if(i[s][j]==0)
-           {
-               x=s;
-               y=j;
-               break;
            }
-       }
-   }
-   solve(i,x,y,f,i_s);
-       end = clock(); 
-    double time_taken = double(end - start) / double(CLOCKS_PER_SEC); 
-    cout << "Time taken by program is : " << fixed  
-         << time_taken << setprecision(5); 
-    cout << " sec " << endl; 
+        }
 
+   solve(vec,x,y,f,is);
+      
 }
-0.000327sec(//if the child node to be generated is already present in tree then no need to generate)
-0.000171sec(if no need to check )
